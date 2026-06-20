@@ -1,0 +1,2481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Phone · App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #2b3a4a 0%, #1d2a35 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .phone {
+            width: 360px;
+            max-width: 100%;
+            background: #111a22;
+            border-radius: 56px;
+            padding: 18px 12px 22px 12px;
+            box-shadow:
+                0 30px 50px rgba(0, 0, 0, 0.6),
+                0 0 0 2px #3a4c5e inset,
+                0 0 0 4px #1f2c38 inset;
+            transition: transform 0.2s ease;
+        }
+
+        .phone:hover {
+            transform: scale(1.01);
+        }
+
+        .screen {
+            background: #ffffff;
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 0 0 1px #4f667a inset, 0 8px 20px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            height: 680px;
+            max-height: 80vh;
+        }
+
+        .app-header {
+            background: #2e7d32;
+            padding: 10px 14px 8px 14px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #1b5e20;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+            gap: 6px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .header-left .logo {
+            width: 30px;
+            height: 30px;
+            background: #1b5e20;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 10px;
+            flex-shrink: 0;
+        }
+
+        .header-left .logo i {
+            font-size: 16px;
+        }
+
+        .header-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .header-text .company {
+            font-size: 0.55rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 0.3px;
+        }
+
+        .header-text .sub {
+            font-size: 0.45rem;
+            color: #e8f5e9;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .header-right {
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .header-right .payroll-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 10px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        .app-body {
+            flex: 1;
+            padding: 14px 14px 12px 14px;
+            overflow-y: auto;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            scroll-behavior: smooth;
+        }
+
+        .app-body::-webkit-scrollbar {
+            width: 4px;
+        }
+        .app-body::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+        }
+        .app-body::-webkit-scrollbar-thumb {
+            background: #3f5a70;
+            border-radius: 12px;
+        }
+
+        .login-container {
+            max-width: 280px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .login-container h2 {
+            text-align: center;
+            color: #1a3a4a;
+            margin-bottom: 6px;
+            font-size: 1.3rem;
+        }
+
+        .login-container p.subtitle {
+            text-align: center;
+            color: #6a8a9a;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #1a3a4a;
+            margin-bottom: 4px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 9px 12px;
+            border: 2px solid #dce4ec;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            transition: border-color 0.2s ease;
+            outline: none;
+            background: #f8faff;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #2e7d32;
+            background: #ffffff;
+        }
+
+        .form-group select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231a3a4a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 36px;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 6px;
+        }
+
+        .login-btn:hover {
+            background: #1b5e20;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(46, 125, 50, 0.4);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            background: #fee8e8;
+            color: #c0392b;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            margin-bottom: 14px;
+            display: none;
+            border-left: 4px solid #c0392b;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .success-message {
+            background: #e8f8ee;
+            color: #1a7a4a;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            margin-bottom: 14px;
+            display: none;
+            border-left: 4px solid #1a7a4a;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .app-footer {
+            background: #2e7d32;
+            padding: 8px 16px 6px 16px;
+            border-top: 2px solid #1b5e20;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        .footer-text {
+            font-size: 0.5rem;
+            color: #ffffff;
+            font-weight: 500;
+            text-align: center;
+            letter-spacing: 0.2px;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        .footer-text .powered {
+            font-weight: 600;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #f8faff 0%, #e8f0f8 100%);
+            border-radius: 16px;
+            padding: 16px 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(46, 125, 50, 0.15);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #2e7d32, #66bb6a, #2e7d32);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(46, 125, 50, 0.15);
+            border-color: #2e7d32;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card i {
+            font-size: 2rem;
+            color: #2e7d32;
+            margin-bottom: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover i {
+            transform: scale(1.1);
+        }
+
+        .card span {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #1a3a4a;
+            line-height: 1.3;
+        }
+
+        .card .card-sub {
+            font-size: 0.6rem;
+            color: #6a8a9a;
+            font-weight: 400;
+            margin-top: 2px;
+        }
+
+        .card-full {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-color: #2e7d32;
+        }
+
+        .card-full i {
+            color: #1b5e20;
+        }
+
+        .card-full span {
+            color: #1b5e20;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .registration-form {
+            max-width: 100%;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .registration-form h2 {
+            text-align: center;
+            color: #1a3a4a;
+            margin-bottom: 4px;
+            font-size: 1.1rem;
+        }
+
+        .registration-form p.subtitle {
+            text-align: center;
+            color: #6a8a9a;
+            font-size: 0.75rem;
+            margin-bottom: 14px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .form-row .form-group {
+            margin-bottom: 10px;
+        }
+
+        .back-btn {
+            background: #e8edf4;
+            color: #1a3a4a;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .back-btn:hover {
+            background: #d0dae6;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 6px;
+        }
+
+        .submit-btn:hover {
+            background: #1b5e20;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(46, 125, 50, 0.4);
+        }
+
+        .submit-btn-secondary {
+            width: 100%;
+            padding: 12px;
+            background: #e8edf4;
+            color: #1a3a4a;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 6px;
+        }
+
+        .submit-btn-secondary:hover {
+            background: #d0dae6;
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+
+        .page-title h2 {
+            color: #1a3a4a;
+            font-size: 1.1rem;
+        }
+
+        .page-title .badge {
+            background: #2e7d32;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .action-btn.primary {
+            background: #2e7d32;
+            color: white;
+        }
+
+        .action-btn.primary:hover {
+            background: #1b5e20;
+        }
+
+        .action-btn.secondary {
+            background: #e8edf4;
+            color: #1a3a4a;
+        }
+
+        .action-btn.secondary:hover {
+            background: #d0dae6;
+        }
+
+        .action-btn.danger {
+            background: #fee8e8;
+            color: #c0392b;
+        }
+
+        .action-btn.danger:hover {
+            background: #fdd0d0;
+        }
+
+        .payslip-container {
+            background: #f8faff;
+            border-radius: 14px;
+            padding: 16px;
+            border: 2px solid #e8edf4;
+            margin-top: 10px;
+        }
+
+        .payslip-container .payslip-header {
+            text-align: center;
+            border-bottom: 2px solid #2e7d32;
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+        }
+
+        .payslip-container .payslip-header h3 {
+            color: #1a3a4a;
+            font-size: 1rem;
+        }
+
+        .payslip-container .payslip-header p {
+            color: #6a8a9a;
+            font-size: 0.7rem;
+        }
+
+        .payslip-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #e8edf4;
+        }
+
+        .payslip-row .label {
+            font-weight: 500;
+            color: #4a6a7a;
+            font-size: 0.8rem;
+        }
+
+        .payslip-row .value {
+            font-weight: 600;
+            color: #1a3a4a;
+            font-size: 0.8rem;
+        }
+
+        .payslip-row.total {
+            border-bottom: none;
+            padding-top: 10px;
+            margin-top: 4px;
+        }
+
+        .payslip-row.total .label {
+            font-weight: 700;
+            color: #1a3a4a;
+            font-size: 0.9rem;
+        }
+
+        .payslip-row.total .value {
+            font-weight: 700;
+            color: #2e7d32;
+            font-size: 1rem;
+        }
+
+        .payslip-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .payslip-actions button {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-print {
+            background: #e8edf4;
+            color: #1a3a4a;
+        }
+
+        .btn-print:hover {
+            background: #d0dae6;
+        }
+
+        .btn-clear {
+            background: #fee8e8;
+            color: #c0392b;
+        }
+
+        .btn-clear:hover {
+            background: #fdd0d0;
+        }
+
+        .report-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .report-card {
+            background: #f8faff;
+            border-radius: 14px;
+            padding: 14px 10px;
+            border: 2px solid #e8edf4;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .report-card:hover {
+            transform: translateY(-2px);
+            border-color: #2e7d32;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .report-card i {
+            font-size: 1.6rem;
+            color: #2e7d32;
+            margin-bottom: 6px;
+        }
+
+        .report-card h4 {
+            color: #1a3a4a;
+            font-size: 0.8rem;
+            margin-bottom: 2px;
+        }
+
+        .report-card p {
+            color: #6a8a9a;
+            font-size: 0.65rem;
+        }
+
+        .report-card .report-badge {
+            display: inline-block;
+            background: #2e7d32;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.55rem;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .report-detail {
+            background: #f8faff;
+            border-radius: 14px;
+            padding: 16px;
+            border: 2px solid #e8edf4;
+            margin-top: 12px;
+        }
+
+        .report-detail .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #2e7d32;
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+        }
+
+        .report-detail .report-header h4 {
+            color: #1a3a4a;
+            font-size: 0.9rem;
+        }
+
+        .report-detail .report-header .close-btn {
+            background: #fee8e8;
+            color: #c0392b;
+            border: none;
+            padding: 3px 10px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.7rem;
+        }
+
+        .report-detail .report-header .close-btn:hover {
+            background: #fdd0d0;
+        }
+
+        .report-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #e8edf4;
+            font-size: 0.8rem;
+        }
+
+        .report-item .label {
+            color: #4a6a7a;
+        }
+
+        .report-item .value {
+            color: #1a3a4a;
+            font-weight: 500;
+        }
+
+        .report-item.total {
+            border-bottom: none;
+            padding-top: 8px;
+            margin-top: 4px;
+            font-weight: 700;
+        }
+
+        .report-item.total .value {
+            color: #2e7d32;
+            font-size: 0.9rem;
+        }
+
+        .attendance-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .attendance-stat {
+            background: #f8faff;
+            border-radius: 12px;
+            padding: 12px 8px;
+            text-align: center;
+            border: 1px solid #e8edf4;
+        }
+
+        .attendance-stat .number {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1a3a4a;
+        }
+
+        .attendance-stat .label {
+            font-size: 0.6rem;
+            color: #6a8a9a;
+        }
+
+        .attendance-stat .number.present {
+            color: #2e7d32;
+        }
+        .attendance-stat .number.absent {
+            color: #c0392b;
+        }
+        .attendance-stat .number.leave {
+            color: #f39c12;
+        }
+
+        .attendance-table {
+            width: 100%;
+            margin-top: 12px;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+        }
+
+        .attendance-table th {
+            text-align: left;
+            padding: 8px 6px;
+            background: #e8edf4;
+            color: #1a3a4a;
+            font-weight: 600;
+            border-bottom: 2px solid #2e7d32;
+        }
+
+        .attendance-table td {
+            padding: 8px 6px;
+            border-bottom: 1px solid #e8edf4;
+            color: #1a3a4a;
+        }
+
+        .attendance-table .status {
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            display: inline-block;
+        }
+
+        .attendance-table .edit-btn {
+            background: #e8edf4;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: #1a3a4a;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .attendance-table .edit-btn:hover {
+            background: #d0dae6;
+        }
+
+        .status.present {
+            background: #e8f8ee;
+            color: #2e7d32;
+        }
+        .status.absent {
+            background: #fee8e8;
+            color: #c0392b;
+        }
+        .status.leave {
+            background: #fef9e8;
+            color: #f39c12;
+        }
+
+        .payroll-table {
+            width: 100%;
+            margin-top: 12px;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+        }
+
+        .payroll-table th {
+            text-align: left;
+            padding: 8px 6px;
+            background: #e8edf4;
+            color: #1a3a4a;
+            font-weight: 600;
+            border-bottom: 2px solid #2e7d32;
+        }
+
+        .payroll-table td {
+            padding: 8px 6px;
+            border-bottom: 1px solid #e8edf4;
+            color: #1a3a4a;
+        }
+
+        .payroll-table .amount {
+            font-weight: 500;
+            text-align: right;
+        }
+
+        .payroll-table .net {
+            font-weight: 700;
+            color: #2e7d32;
+        }
+
+        .payroll-summary {
+            background: #f8faff;
+            border-radius: 12px;
+            padding: 12px 14px;
+            border: 1px solid #e8edf4;
+            margin-top: 12px;
+        }
+
+        .payroll-summary .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            font-size: 0.8rem;
+        }
+
+        .payroll-summary .summary-row.total {
+            font-weight: 700;
+            border-top: 2px solid #2e7d32;
+            padding-top: 8px;
+            margin-top: 4px;
+            color: #2e7d32;
+        }
+
+        .payroll-processing-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .payroll-field {
+            background: #f8faff;
+            border-radius: 12px;
+            padding: 12px 10px;
+            border: 1px solid #e8edf4;
+            text-align: center;
+        }
+
+        .payroll-field .field-icon {
+            font-size: 1.3rem;
+            color: #2e7d32;
+            margin-bottom: 4px;
+        }
+
+        .payroll-field .field-label {
+            font-size: 0.65rem;
+            color: #6a8a9a;
+            font-weight: 500;
+        }
+
+        .payroll-field .field-value {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #1a3a4a;
+            margin-top: 2px;
+        }
+
+        .payroll-field.total-field {
+            background: #e8f8ee;
+            border-color: #2e7d32;
+        }
+
+        .payroll-field.total-field .field-value {
+            color: #2e7d32;
+            font-size: 1rem;
+        }
+
+        .formula-box {
+            background: #e8edf4;
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin: 10px 0;
+            text-align: center;
+            border-left: 4px solid #2e7d32;
+        }
+
+        .formula-box .formula {
+            font-weight: 600;
+            color: #1a3a4a;
+            font-size: 0.85rem;
+        }
+
+        .formula-box .formula-desc {
+            font-size: 0.7rem;
+            color: #4a6a7a;
+            margin-top: 4px;
+        }
+
+        .welcome-text {
+            color: #1a3a4a;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 6px;
+        }
+
+        .welcome-text i {
+            color: #2e7d32;
+            margin-right: 6px;
+        }
+
+        .section-label {
+            color: #6a8a9a;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .logout-btn {
+            padding: 6px 20px;
+            background: #fee8e8;
+            color: #c0392b;
+            border: 1px solid #c0392b;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+        }
+
+        .logout-btn:hover {
+            background: #fdd0d0;
+        }
+
+        .staff-select {
+            width: 100%;
+            padding: 9px 12px;
+            border: 2px solid #dce4ec;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            transition: border-color 0.2s ease;
+            outline: none;
+            background: #f8faff;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231a3a4a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 36px;
+        }
+
+        .staff-select:focus {
+            border-color: #2e7d32;
+            background: #ffffff;
+        }
+
+        .employee-table {
+            width: 100%;
+            margin-top: 12px;
+            border-collapse: collapse;
+            font-size: 0.7rem;
+        }
+
+        .employee-table th {
+            text-align: left;
+            padding: 6px 4px;
+            background: #e8edf4;
+            color: #1a3a4a;
+            font-weight: 600;
+            border-bottom: 2px solid #2e7d32;
+            font-size: 0.65rem;
+        }
+
+        .employee-table td {
+            padding: 6px 4px;
+            border-bottom: 1px solid #e8edf4;
+            color: #1a3a4a;
+            font-size: 0.65rem;
+        }
+
+        .employee-table .status-badge {
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.6rem;
+            font-weight: 600;
+        }
+
+        .status-badge.active {
+            background: #e8f8ee;
+            color: #2e7d32;
+        }
+        .status-badge.leave {
+            background: #fef9e8;
+            color: #f39c12;
+        }
+        .status-badge.probation {
+            background: #e8edf4;
+            color: #4a6a7a;
+        }
+        .status-badge.terminated {
+            background: #fee8e8;
+            color: #c0392b;
+        }
+        .status-badge.retired {
+            background: #e8edf4;
+            color: #6a8a9a;
+        }
+
+        @media (max-width: 420px) {
+            .phone {
+                padding: 12px 8px 16px 8px;
+                border-radius: 42px;
+            }
+            .screen {
+                border-radius: 32px;
+                height: 620px;
+            }
+            .app-header {
+                padding: 8px 10px 6px 10px;
+            }
+            .app-body {
+                padding: 12px 10px 10px 10px;
+            }
+            .card i {
+                font-size: 1.5rem;
+            }
+            .card span {
+                font-size: 0.7rem;
+            }
+            .card .card-sub {
+                font-size: 0.55rem;
+            }
+            .cards-grid {
+                gap: 8px;
+            }
+            .login-container {
+                max-width: 100%;
+            }
+            .header-left .logo {
+                width: 24px;
+                height: 24px;
+            }
+            .header-left .logo i {
+                font-size: 12px;
+            }
+            .header-text .company {
+                font-size: 0.45rem;
+            }
+            .header-text .sub {
+                font-size: 0.4rem;
+            }
+            .header-right .payroll-title {
+                font-size: 0.6rem;
+                padding: 2px 8px;
+            }
+            .footer-text {
+                font-size: 0.45rem;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            .registration-form h2 {
+                font-size: 1rem;
+            }
+            .payslip-actions {
+                flex-direction: column;
+            }
+            .report-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+            .report-card {
+                padding: 10px 8px;
+            }
+            .report-card i {
+                font-size: 1.3rem;
+            }
+            .report-card h4 {
+                font-size: 0.7rem;
+            }
+            .attendance-summary {
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 6px;
+            }
+            .attendance-stat {
+                padding: 8px 4px;
+            }
+            .attendance-stat .number {
+                font-size: 1rem;
+            }
+            .attendance-table th,
+            .attendance-table td {
+                padding: 6px 4px;
+                font-size: 0.7rem;
+            }
+            .payroll-table th,
+            .payroll-table td {
+                padding: 6px 4px;
+                font-size: 0.65rem;
+            }
+            .payroll-table .amount {
+                font-size: 0.65rem;
+            }
+            .payroll-summary .summary-row {
+                font-size: 0.7rem;
+            }
+            .payroll-processing-grid {
+                gap: 6px;
+            }
+            .payroll-field {
+                padding: 8px 6px;
+            }
+            .payroll-field .field-value {
+                font-size: 0.75rem;
+            }
+            .action-buttons {
+                flex-direction: column;
+            }
+            .employee-table th,
+            .employee-table td {
+                font-size: 0.6rem;
+                padding: 4px 3px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="phone">
+        <div class="screen">
+
+            <header class="app-header">
+                <div class="header-left">
+                    <div class="logo">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <div class="header-text">
+                        <span class="company">INFORMATICS CONSULTANCY FIRM-SL</span>
+                        <span class="sub">Payroll System</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <span class="payroll-title">PAYROLL</span>
+                </div>
+            </header>
+
+            <main class="app-body" id="appBody">
+                <!-- Login Section -->
+                <div id="loginSection" class="login-container">
+                    <h2>Welcome Back</h2>
+                    <p class="subtitle">Sign in to your account</p>
+                    <div id="errorMessage" class="error-message">
+                        <i class="fas fa-exclamation-circle"></i> Invalid username or password
+                    </div>
+                    <div id="successMessage" class="success-message">
+                        <i class="fas fa-check-circle"></i> Login successful!
+                    </div>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" placeholder="Enter username" value="admin" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" placeholder="Enter password" value="1234" required />
+                        </div>
+                        <button type="submit" class="login-btn">
+                            <i class="fas fa-sign-in-alt"></i> Sign In
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Dashboard Section -->
+                <div id="dashboardSection" class="hidden" style="width: 100%;">
+                    <div class="welcome-text">
+                        <i class="fas fa-user-circle"></i> Welcome, Admin!
+                    </div>
+
+                    <!-- Page 1: Dashboard with Quick Actions -->
+                    <div id="page1">
+                        <div>
+                            <p class="section-label">Quick Actions</p>
+                            <div class="cards-grid">
+                                <div class="card" onclick="showDashboardPage()">
+                                    <i class="fas fa-chart-pie"></i>
+                                    <span>Dashboard</span>
+                                    <span class="card-sub">View Summary</span>
+                                </div>
+                                <div class="card" onclick="showAttendance()">
+                                    <i class="fas fa-clipboard-list"></i>
+                                    <span>Attendance</span>
+                                    <span class="card-sub">Manage Records</span>
+                                </div>
+                                <div class="card" onclick="showPayrollCalc()">
+                                    <i class="fas fa-calculator"></i>
+                                    <span>Payroll Calculation</span>
+                                    <span class="card-sub">Compute Salaries</span>
+                                </div>
+                                <div class="card" onclick="showRegistration()">
+                                    <i class="fas fa-user-plus"></i>
+                                    <span>Employee Registration</span>
+                                    <span class="card-sub">Add New Staff</span>
+                                </div>
+                                <div class="card" onclick="showPayslip()">
+                                    <i class="fas fa-file-invoice"></i>
+                                    <span>Payslip</span>
+                                    <span class="card-sub">Generate Slip</span>
+                                </div>
+                                <div class="card" onclick="showReports()">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span>Reports</span>
+                                    <span class="card-sub">View Analytics</span>
+                                </div>
+                                <div class="card card-full" onclick="showPayrollProcessing()">
+                                    <i class="fas fa-coins"></i>
+                                    <span>Payroll Processing</span>
+                                    <span class="card-sub">Process Monthly Payroll</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 12px; text-align: center;">
+                            <button class="logout-btn" id="logoutBtn">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Page 1a: Dashboard Detail View -->
+                    <div id="page1a" class="hidden">
+                        <button class="back-btn" onclick="showPage1()">
+                            <i class="fas fa-arrow-left"></i> Back to Menu
+                        </button>
+                        <div class="registration-form">
+                            <div class="page-title">
+                                <h2>Dashboard</h2>
+                                <span class="badge">Overview</span>
+                            </div>
+                            <p class="subtitle">Payroll summary at a glance</p>
+
+                            <div class="attendance-summary" style="margin-top: 8px;">
+                                <div class="attendance-stat" style="border-color: #2e7d32;">
+                                    <div class="number" style="color: #2e7d32;">45</div>
+                                    <div class="label">Total Employees</div>
+                                </div>
+                                <div class="attendance-stat" style="border-color: #2e7d32;">
+                                    <div class="number" style="color: #2e7d32;">$238,700</div>
+                                    <div class="label">Monthly Payroll</div>
+                                </div>
+                                <div class="attendance-stat" style="border-color: #f39c12;">
+                                    <div class="number" style="color: #f39c12;">12</div>
+                                    <div class="label">Pending Payments</div>
+                                </div>
+                                <div class="attendance-stat" style="border-color: #c0392b; grid-column: 1 / -1;">
+                                    <div class="number" style="color: #c0392b;">$27,750</div>
+                                    <div class="label">Total Deductions</div>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 14px;">
+                                <div class="payroll-summary">
+                                    <div class="summary-row"><span>Total Gross Salary</span><span>$266,450.00</span></div>
+                                    <div class="summary-row"><span>Total Allowances</span><span>$22,500.00</span></div>
+                                    <div class="summary-row"><span>Total Bonuses</span><span>$8,500.00</span></div>
+                                    <div class="summary-row"><span>Total Overtime</span><span>$5,200.00</span></div>
+                                    <div class="summary-row"><span>Total Deductions</span><span>$27,750.00</span></div>
+                                    <div class="summary-row total"><span>Total Net Pay</span><span>$238,700.00</span></div>
+                                    <div class="summary-row" style="border-top: 1px solid #e8edf4; margin-top: 4px; padding-top: 6px; font-size: 0.7rem; color: #6a8a9a;">
+                                        <span>As of June 2026</span>
+                                        <span>Updated: Today</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page 2: Attendance -->
+                    <div id="page2" class="hidden">
+                        <button class="back-btn" onclick="showPage1()">
+                            <i class="fas fa-arrow-left"></i> Back to Menu
+                        </button>
+                        <div class="registration-form">
+                            <div class="page-title">
+                                <h2>Attendance</h2>
+                                <span class="badge">Today</span>
+                            </div>
+                            <p class="subtitle">Employee attendance records</p>
+
+                            <div class="action-buttons">
+                                <button class="action-btn primary" onclick="showNewAttendance()">
+                                    <i class="fas fa-plus"></i> New Attendance
+                                </button>
+                                <button class="action-btn secondary" onclick="editAttendance()">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                            </div>
+
+                            <div class="attendance-summary">
+                                <div class="attendance-stat">
+                                    <div class="number present">32</div>
+                                    <div class="label">Present</div>
+                                </div>
+                                <div class="attendance-stat">
+                                    <div class="number absent">8</div>
+                                    <div class="label">Absent</div>
+                                </div>
+                                <div class="attendance-stat">
+                                    <div class="number leave">5</div>
+                                    <div class="label">On Leave</div>
+                                </div>
+                            </div>
+
+                            <table class="attendance-table">
+                                <thead>
+                                    <tr>
+                                        <th>Attendance ID</th>
+                                        <th>Employee ID</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="attendanceTableBody">
+                                    <tr>
+                                        <td>ATT-001</td>
+                                        <td>EMP-001</td>
+                                        <td>2026-06-20</td>
+                                        <td><span class="status present">Present</span></td>
+                                        <td><button class="edit-btn" onclick="editAttendanceRow('ATT-001')"><i class="fas fa-edit"></i> Edit</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>ATT-002</td>
+                                        <td>EMP-002</td>
+                                        <td>2026-06-20</td>
+                                        <td><span class="status present">Present</span></td>
+                                        <td><button class="edit-btn" onclick="editAttendanceRow('ATT-002')"><i class="fas fa-edit"></i> Edit</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>ATT-003</td>
+                                        <td>EMP-003</td>
+                                        <td>2026-06-20</td>
+                                        <td><span class="status absent">Absent</span></td>
+                                        <td><button class="edit-btn" onclick="editAttendanceRow('ATT-003')"><i class="fas fa-edit"></i> Edit</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>ATT-004</td>
+                                        <td>EMP-004</td>
+                                        <td>2026-06-20</td>
+                                        <td><span class="status leave">On Leave</span></td>
+                                        <td><button class="edit-btn" onclick="editAttendanceRow('ATT-004')"><i class="fas fa-edit"></i> Edit</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>ATT-005</td>
+                                        <td>EMP-005</td>
+                                        <td>2026-06-20</td>
+                                        <td><span class="status present">Present</span></td>
+                                        <td><button class="edit-btn" onclick="editAttendanceRow('ATT-005')"><i class="fas fa-edit"></i> Edit</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Page 2a: New Attendance Form -->
+                    <div id="page2a" class="hidden">
+                        <button class="back-btn" onclick="showAttendance()">
+                            <i class="fas fa-arrow-left"></i> Back to Attendance
+                        </button>
+                        <div class="registration-form">
+                            <div class="page-title">
+                                <h2>New Attendance</h2>
+                                <span class="badge">Add</span>
+                            </div>
+                            <p class="subtitle">Record new employee attendance</p>
+                            <form id="newAttendanceForm">
+                                <div class="form-group">
+                                    <label for="attEmployee">Employee</label>
+                                    <select class="staff-select" id="attEmployee" required>
+                                        <option value="">-- Select Employee --</option>
+                                        <option value="EMP-001|John Doe">EMP-001 - John Doe</option>
+                                        <option value="EMP-002|Jane Smith">EMP-002 - Jane Smith</option>
+                                        <option value="EMP-003|Bob Johnson">EMP-003 - Bob Johnson</option>
+                                        <option value="EMP-004|Alice Brown">EMP-004 - Alice Brown</option>
+                                        <option value="EMP-005|Charlie Wilson">EMP-005 - Charlie Wilson</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="attDate">Date</label>
+                                    <input type="date" id="attDate" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="attStatus">Status</label>
+                                    <select id="attStatus" required>
+                                        <option value="">Select Status</option>
+                                        <option value="Present">Present</option>
+                                        <option value="Absent">Absent</option>
+                                        <option value="On Leave">On Leave</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="submit-btn">
+                                    <i class="fas fa-save"></i> Save Attendance
+                                </button>
+                                <button type="button" class="submit-btn-secondary" onclick="showAttendance()">
+                                    <i class="fas fa-times"></i> Cancel
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Page 2b: Edit Attendance Form -->
+                    <div id="page2b" class="hidden">
+                        <button class="back-btn" onclick="showAttendance()">
+                            <i class="fas fa-arrow-left"></i> Back to Attendance
+                        </button>
+                        <div class="registration-form">
+                            <div class="page-title">
+                                <h2>Edit Attendance</h2>
+                                <span class="badge">Update</span>
+                            </div>
+                            <p class="subtitle">Update attendance record</p>
+                            <form id="editAttendanceForm">
+                                <div class="form-group">
+                                    <label>Attendance ID</label>
+                                    <input type="text" id="editAttId" disabled style="background: #e8edf4;" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="editAttEmployee">Employee</label>
+                                    <select class="staff-select" id="editAttEmployee" required>
+                                        <option value="EMP-001|John Doe">EMP-001 - John Doe</option>
+                                        <option value="EMP-002|Jane Smith">EMP-002 - Jane Smith</option>
+                                        <option value="EMP-003|Bob Johnson">EMP-003 - Bob Johnson</option>
+                                        <option value="EMP-004|Alice Brown">EMP-004 - Alice Brown</option>
+                                        <option value="EMP-005|Charlie Wilson">EMP-005 - Charlie Wilson</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editAttDate">Date</label>
+                                    <input type="date" id="editAttDate" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="editAttStatus">Status</label>
+                                    <select id="editAttStatus" required>
+                                        <option value="Present">Present</option>
+                                        <option value="Absent">Absent</option>
+                                        <option value="On Leave">On Leave</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="submit-btn">
+                                    <i class="fas fa-save"></i> Update Attendance
+                                </button>
+                                <button type="button" class="submit-btn-secondary" onclick="showAttendance()">
+                                    <i class="fas fa-times"></i> Cancel
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Page 3: Payroll Calculation -->
+                    <div id="page3" class="hidden">
+                        <button class="back-btn" onclick="showPage1()">
+                            <i class="fas fa-arrow-left"></i> Back to Menu
+                        </button>
+                        <div class="registration-form">
+                            <div class="page-title">
+                                <h2>Payroll Calculation</h2>
+                                <span class="badge">June 2026</span>
+                            </div>
+                            <p class="subtitle">Employee payroll calculation details</p>
+                            <table class="payroll-table">
+                                <thead>
+                                    <tr>
+                                        <th>Payroll ID</th>
+                                        <th>Employee ID</th>
+                                        <th>Month</th>
+                                        <th>Gross Salary</th>
+                                        <th>Deductions</th>
+                                        <th>Net Salary</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>PAY-001</td><td>EMP-001</td><td>June 2026</td><td class="amount">$5,000.00</td><td class="amount">$500.00</td><td class="amount net">$4,500.00</td></tr>
+                                    <tr><td>PAY-002</td><td>EMP-002</td><td>June 2026</td><td class="amount">$4,500.00</td><td class="amount">$450.00</td><td class="amount net">$4,050.00</td></tr>
+                                    <tr><td>PAY-003</td><td>EMP-003</td><td>June 2026</td><td class="amount">$5,200.00</td><td class="amount">$520.00</td><td class="amount net">$4,680.00</td></tr>
+                                    <tr><td>PAY-004</td><td>EMP-004</td><td>June 2026</td><td class="amount">$4,800.00</td><td class="amount">$480.00</td><td class="amount net">$4,320.00</td></tr>
+                                    <tr><td>PAY-005</td><td>EMP-005</td><td>June 2026</td><td class="amount">$4,200.00</td><td class="amount">$420.00</td><td class="amount net">$3,780.00</td></tr>
+                                </tbody>
+                            </table>
+                            <div class="payroll-summary">
+                                <div class="summary-row"><span>Total Gross Salary</span><span>$23,700.00</span></div>
+                                <div class="summary-row"><span>Total Deductions</span><span>$2,370.00</span></div>
+                                <div class="summary-row total"><span>Total Net Salary</span><span>$21,330.00</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page 4: Employee Registration -->
+                    <div id="page4" class="hidden">
+                        <button class="back-btn" onclick="showPage1()">
+                            <i class="fas fa-arrow-left"></i> Back to Menu
+                        </button>
+                        <div class="registration-form">
+                            <div class="page-title">
+                                <h2>Employee Registration</h2>
+                                <span class="badge">New</span>
+                            </div>
+                            <p class="subtitle">Enter employee details below</p>
+
+                            <div class="action-buttons">
+                                <button class="action-btn primary" onclick="showEmployeeRecords()">
+                                    <i class="fas fa-list"></i> View Records
+                                </button>
+                            </div>
+
+                            <form id="registrationForm">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="staffId">Staff ID</label>
+                                        <input type="text" id="staffId" placeholder="e.g., EMP-001" required />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="fullName">Full Name</label>
+                                        <input type="text" id="fullName" placeholder="e.g., John Doe" required />
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="gender">Gender</label>
+                                        <select id="gender" required>
+                                            <option value="">Select Gender</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="department">Department</label>
+                                        <select id="department" required>
+                                            <option value="">Select Department</option>
+                                            <option value="IT">IT</option>
+                                            <option value="HR">Human Resources</option>
+                                            <option value="Finance">Finance</option>
+                                            <option value="Operations">Operations</option>
+                                            <option value="Sales">Sales</option>
+                                            <option value="Marketing">Marketing</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="position">Position</label>
+                                        <input type="text" id="position" placeholder="e.g., Software Engineer" required />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="bankDetails">Bank Details</label>
+                                        <input type="text" id="bankDetails" placeholder="Bank Name & Account No." required />
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="salaryGrade">Salary Grade</label>
+                                        <select id="salaryGrade" required>
+                                            <option value="">Select Grade</option>
+                                            <option value="Grade 1">Grade 1</option>
+                                            <option value="Grade 2">Grade 2</option>
+                                            <option value="Grade 3">Grade 3</option>
+                                            <option value="Grade 4">Grade 4</option>
+                                            <option value="Grade 5">Grade 5</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="employmentDate">Employment Date</label>
+                                        <input type="date" id="employmentDate" required />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="status">Status</label>
+                                    <select id="status" required>
+                                        <option value="">Select Status</option>
+                                        <option value="Active">Active</option>
+                                        <option value="On Leave">On Leave</option>
+                                        <option value="Probation">Probation</option>
+                                        <option value="Terminated">Terminated</option>
+                                        <option value="Retired">Retired</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="submit-btn">
+                                    <i class="fas fa-save"></i> Register Employee
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Page 4a: Employee Records -->
+                    <div id="page4a" class="hidden">
+                        <button class="back-btn" onclick="showRegistration()">
+                            <i class="fas fa-arrow-left"></i> Back to Registration
+                        </button>
+                        <div class="registration-form">
+                            <div class="page-title">
+                                <h2>Employee Records</h2>
+                                <span class="badge" id="recordCount">0</span>
+                            </div>
+                            <p class="subtitle">All registered employees</p>
+
+                            <div style="overflow-x: auto;">
+                                <table class="employee-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Staff ID</th>
+                                            <th>Full Name</th>
+                                            <th>Department</th>
+                                            <th>Position</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="employeeRecordsBody">
+                                        <!-- Records will be inserted here -->
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div style="margin-top: 12px; text-align: center;">
+                                <button class="submit-btn-secondary" onclick="showRegistration()">
+                                    <i class="fas fa-arrow-left"></i> Back to Registration
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page 5: Payslip -->
+                    <div id="page5" class="hidden">
+                        <button class="back-btn" onclick="showPage1()">
+                            <i class="fas fa-arrow-left"></i> Back to Menu
+                        </button>
+                        <div class="registration-form">
+                            <div class="page-title">
+                                <h2>Generate Payslip</h2>
+                                <span class="badge">Staff</span>
+                            </div>
+                            <p class="subtitle">Select a staff member to generate payslip</p>
+                            <form id="payslipForm">
+                                <div class="form-group">
+                                    <label for="employeeSelect">Select Employee</label>
+                                    <select class="staff-select" id="employeeSelect" required>
+                                        <option value="">-- Select Employee --</option>
+                                        <option value="John Doe|EMP-001|5000|500">John Doe (EMP-001)</option>
+                                        <option value="Jane Smith|EMP-002|4500|450">Jane Smith (EMP-002)</option>
+                                        <option value="Bob Johnson|EMP-003|5200|520">Bob Johnson (EMP-003)</option>
+                                        <option value="Alice Brown|EMP-004|4800|480">Alice Brown (EMP-004)</option>
+                                        <option value="Charlie Wilson|EMP-005|4200|420">Charlie Wilson (EMP-005)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="paymentDate">Payment Date</label>
+                                    <input type="date" id="paymentDate" required />
+                                </div>
+                                <button type="submit" class="submit-btn">
+                                    <i class="fas fa-file-invoice"></i> Generate Payslip
+                                </button>
+                            </form>
+                            <div id="payslipResult" class="payslip-container hidden" style="margin-top: 12px;">
+                                <div class="payslip-header">
+                                    <h3>INFORMATICS CONSULTANCY FIRM-SL</h3>
+                                    <p>Monthly Payslip</p>
+                                </div>
+                                <div class="payslip-row"><span class="label">Employee Name</span><span class="value" id="displayName">-</span></div>
+                                <div class="payslip-row"><span class="label">Employee ID</span><span class="value" id="displayEmpId">-</span></div>
+                                <div class="payslip-row"><span class="label">Basic Salary</span><span class="value" id="displaySalary">-</span></div>
+                                <div class="payslip-row"><span class="label">Deductions</span><span class="value" id="displayDeductions">-</span></div>
+                                <div class="payslip-row"><span class="label">Payment Date</span><span class="value" id="displayDate">-</span></div>
+                                <div class="payslip-row total"><span class="label">Net Pay</span><span class="value" id="displayNetPay">-</span></div>
+                                <div class="payslip-actions">
+                                    <button class="btn-print" onclick="printPayslip()"><i class="fas fa-print"></i> Print</button>
+                                    <button class="btn-clear" onclick="clearPayslip()"><i class="fas fa-times"></i> Clear</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page 6: Reports -->
+                    <div id="page6" class="hidden">
+                        <button class="back-btn" onclick="showPage1()">
+                            <i class="fas fa-arrow-left"></i> Back to Menu
+                        </button>
+                        <div class="registration-form">
+                            <div class="page-title">
+                                <h2>Reports</h2>
+                                <span class="badge">4</span>
+                            </div>
+                            <p class="subtitle">Click on any report to generate</p>
+                            <div class="report-grid">
+                                <div class="report-card" onclick="generateReport('Monthly Payroll Report')">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <h4>Monthly Payroll Report</h4>
+                                    <p>View monthly payroll summary</p>
+                                    <span class="report-badge">Generate</span>
+                                </div>
+                                <div class="report-card" onclick="generateReport('Tax Report')">
+                                    <i class="fas fa-file-invoice-dollar"></i>
+                                    <h4>Tax Report</h4>
+                                    <p>View tax deductions summary</p>
+                                    <span class="report-badge">Generate</span>
+                                </div>
+                                <div class="report-card" onclick="generateReport('Staff Salary Report')">
+                                    <i class="fas fa-users"></i>
+                                    <h4>Staff Salary Report</h4>
+                                    <p>View employee salary details</p>
+                                    <span class="report-badge">Generate</span>
+                                </div>
+                                <div class="report-card" onclick="generateReport('Deduction Report')">
+                                    <i class="fas fa-minus-circle"></i>
+                                    <h4>Deduction Report</h4>
+                                    <p>View all deductions summary</p>
+                                    <span class="report-badge">Generate</span>
+                                </div>
+                            </div>
+                            <div id="reportDetail" class="report-detail hidden">
+                                <div class="report-header">
+                                    <h4 id="reportTitle">Report</h4>
+                                    <button class="close-btn" onclick="closeReport()">
+                                        <i class="fas fa-times"></i> Close
+                                    </button>
+                                </div>
+                                <div id="reportContent"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page 7: Payroll Processing -->
+                    <div id="page7" class="hidden">
+                        <button class="back-btn" onclick="showPage1()">
+                            <i class="fas fa-arrow-left"></i> Back to Menu
+                        </button>
+                        <div class="registration-form">
+                            <div class="page-title">
+                                <h2>Payroll Management</h2>
+                                <span class="badge">Process</span>
+                            </div>
+                            <p class="subtitle">Manage employee payroll components</p>
+                            <form id="payrollProcessForm">
+                                <div class="form-group">
+                                    <label for="processEmployee">Select Employee</label>
+                                    <select class="staff-select" id="processEmployee" required>
+                                        <option value="">-- Select Employee --</option>
+                                        <option value="John Doe|EMP-001">John Doe (EMP-001)</option>
+                                        <option value="Jane Smith|EMP-002">Jane Smith (EMP-002)</option>
+                                        <option value="Bob Johnson|EMP-003">Bob Johnson (EMP-003)</option>
+                                        <option value="Alice Brown|EMP-004">Alice Brown (EMP-004)</option>
+                                        <option value="Charlie Wilson|EMP-005">Charlie Wilson (EMP-005)</option>
+                                    </select>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="basicSalary">Basic Salary</label>
+                                        <input type="number" id="basicSalary" placeholder="e.g., 5000" required />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="allowances">Allowances</label>
+                                        <input type="number" id="allowances" placeholder="e.g., 500" value="0" />
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="bonuses">Bonuses</label>
+                                        <input type="number" id="bonuses" placeholder="e.g., 200" value="0" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="overtime">Overtime</label>
+                                        <input type="number" id="overtime" placeholder="e.g., 300" value="0" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="processDeductions">Deductions</label>
+                                    <input type="number" id="processDeductions" placeholder="e.g., 500" value="0" />
+                                </div>
+                                <div class="formula-box">
+                                    <div class="formula">Net Salary = Gross Salary – Deductions</div>
+                                    <div class="formula-desc">Gross Salary = Basic + Allowances + Bonuses + Overtime</div>
+                                </div>
+                                <div class="payroll-processing-grid">
+                                    <div class="payroll-field"><div class="field-icon"><i class="fas fa-money-bill"></i></div><div class="field-label">Basic Salary</div><div class="field-value" id="calcBasic">$0.00</div></div>
+                                    <div class="payroll-field"><div class="field-icon"><i class="fas fa-plus-circle"></i></div><div class="field-label">Allowances</div><div class="field-value" id="calcAllowances">$0.00</div></div>
+                                    <div class="payroll-field"><div class="field-icon"><i class="fas fa-gift"></i></div><div class="field-label">Bonuses</div><div class="field-value" id="calcBonuses">$0.00</div></div>
+                                    <div class="payroll-field"><div class="field-icon"><i class="fas fa-clock"></i></div><div class="field-label">Overtime</div><div class="field-value" id="calcOvertime">$0.00</div></div>
+                                    <div class="payroll-field"><div class="field-icon"><i class="fas fa-calculator"></i></div><div class="field-label">Gross Salary</div><div class="field-value" id="calcGross">$0.00</div></div>
+                                    <div class="payroll-field"><div class="field-icon"><i class="fas fa-minus-circle"></i></div><div class="field-label">Deductions</div><div class="field-value" id="calcDeductions">$0.00</div></div>
+                                    <div class="payroll-field total-field" style="grid-column: 1 / -1;">
+                                        <div class="field-icon"><i class="fas fa-check-circle"></i></div>
+                                        <div class="field-label">Net Salary</div>
+                                        <div class="field-value" id="calcNet">$0.00</div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="submit-btn">
+                                    <i class="fas fa-save"></i> Process Payroll
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <footer class="app-footer">
+                <div class="footer-text">
+                    <span class="powered">Powered by Informatics consultancy firm-sl</span> @2026
+                </div>
+            </footer>
+
+        </div>
+    </div>
+
+    <script>
+        const users = [{ username: 'admin', password: '1234' }];
+
+        // Employee records storage
+        let employeeRecords = [
+            { staffId: 'EMP-001', fullName: 'John Doe', gender: 'Male', department: 'IT', position: 'Software Engineer', bankDetails: 'BANK-A 123456', salaryGrade: 'Grade 1', employmentDate: '2024-01-15', status: 'Active' },
+            { staffId: 'EMP-002', fullName: 'Jane Smith', gender: 'Female', department: 'HR', position: 'HR Manager', bankDetails: 'BANK-B 789012', salaryGrade: 'Grade 2', employmentDate: '2024-02-01', status: 'Active' },
+            { staffId: 'EMP-003', fullName: 'Bob Johnson', gender: 'Male', department: 'Finance', position: 'Accountant', bankDetails: 'BANK-C 345678', salaryGrade: 'Grade 2', employmentDate: '2024-03-10', status: 'Active' },
+            { staffId: 'EMP-004', fullName: 'Alice Brown', gender: 'Female', department: 'Marketing', position: 'Marketing Lead', bankDetails: 'BANK-D 901234', salaryGrade: 'Grade 3', employmentDate: '2024-04-05', status: 'On Leave' },
+            { staffId: 'EMP-005', fullName: 'Charlie Wilson', gender: 'Male', department: 'Operations', position: 'Operations Manager', bankDetails: 'BANK-E 567890', salaryGrade: 'Grade 3', employmentDate: '2024-05-20', status: 'Active' }
+        ];
+
+        // DOM elements
+        const loginSection = document.getElementById('loginSection');
+        const dashboardSection = document.getElementById('dashboardSection');
+        const loginForm = document.getElementById('loginForm');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const page1 = document.getElementById('page1');
+        const page1a = document.getElementById('page1a');
+        const page2 = document.getElementById('page2');
+        const page2a = document.getElementById('page2a');
+        const page2b = document.getElementById('page2b');
+        const page3 = document.getElementById('page3');
+        const page4 = document.getElementById('page4');
+        const page4a = document.getElementById('page4a');
+        const page5 = document.getElementById('page5');
+        const page6 = document.getElementById('page6');
+        const page7 = document.getElementById('page7');
+
+        // Navigation functions
+        function showPage1() {
+            page1.classList.remove('hidden');
+            page1a.classList.add('hidden');
+            page2.classList.add('hidden');
+            page2a.classList.add('hidden');
+            page2b.classList.add('hidden');
+            page3.classList.add('hidden');
+            page4.classList.add('hidden');
+            page4a.classList.add('hidden');
+            page5.classList.add('hidden');
+            page6.classList.add('hidden');
+            page7.classList.add('hidden');
+            document.getElementById('reportDetail').classList.add('hidden');
+        }
+
+        function showDashboardPage() {
+            page1.classList.add('hidden');
+            page1a.classList.remove('hidden');
+            page2.classList.add('hidden');
+            page2a.classList.add('hidden');
+            page2b.classList.add('hidden');
+            page3.classList.add('hidden');
+            page4.classList.add('hidden');
+            page4a.classList.add('hidden');
+            page5.classList.add('hidden');
+            page6.classList.add('hidden');
+            page7.classList.add('hidden');
+        }
+
+        function showAttendance() {
+            page1.classList.add('hidden');
+            page1a.classList.add('hidden');
+            page2.classList.remove('hidden');
+            page2a.classList.add('hidden');
+            page2b.classList.add('hidden');
+            page3.classList.add('hidden');
+            page4.classList.add('hidden');
+            page4a.classList.add('hidden');
+            page5.classList.add('hidden');
+            page6.classList.add('hidden');
+            page7.classList.add('hidden');
+        }
+
+        function showNewAttendance() {
+            page2.classList.add('hidden');
+            page2a.classList.remove('hidden');
+            page2b.classList.add('hidden');
+        }
+
+        function showEditAttendance() {
+            page2.classList.add('hidden');
+            page2b.classList.remove('hidden');
+            page2a.classList.add('hidden');
+        }
+
+        function showPayrollCalc() {
+            page1.classList.add('hidden');
+            page1a.classList.add('hidden');
+            page3.classList.remove('hidden');
+            page2.classList.add('hidden');
+            page2a.classList.add('hidden');
+            page2b.classList.add('hidden');
+            page4.classList.add('hidden');
+            page4a.classList.add('hidden');
+            page5.classList.add('hidden');
+            page6.classList.add('hidden');
+            page7.classList.add('hidden');
+        }
+
+        function showRegistration() {
+            page1.classList.add('hidden');
+            page1a.classList.add('hidden');
+            page4.classList.remove('hidden');
+            page4a.classList.add('hidden');
+            page2.classList.add('hidden');
+            page2a.classList.add('hidden');
+            page2b.classList.add('hidden');
+            page3.classList.add('hidden');
+            page5.classList.add('hidden');
+            page6.classList.add('hidden');
+            page7.classList.add('hidden');
+        }
+
+        function showEmployeeRecords() {
+            page4.classList.add('hidden');
+            page4a.classList.remove('hidden');
+            renderEmployeeRecords();
+        }
+
+        function renderEmployeeRecords() {
+            const tbody = document.getElementById('employeeRecordsBody');
+            const count = document.getElementById('recordCount');
+            tbody.innerHTML = '';
+            count.textContent = employeeRecords.length;
+
+            if (employeeRecords.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 20px; color: #6a8a9a;">
+                            <i class="fas fa-info-circle"></i> No employees registered yet
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            employeeRecords.forEach(emp => {
+                const statusClass = emp.status.toLowerCase().replace(' ', '');
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${emp.staffId}</td>
+                    <td>${emp.fullName}</td>
+                    <td>${emp.department}</td>
+                    <td>${emp.position}</td>
+                    <td><span class="status-badge ${statusClass}">${emp.status}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function showPayslip() {
+            page1.classList.add('hidden');
+            page1a.classList.add('hidden');
+            page5.classList.remove('hidden');
+            page2.classList.add('hidden');
+            page2a.classList.add('hidden');
+            page2b.classList.add('hidden');
+            page3.classList.add('hidden');
+            page4.classList.add('hidden');
+            page4a.classList.add('hidden');
+            page6.classList.add('hidden');
+            page7.classList.add('hidden');
+        }
+
+        function showReports() {
+            page1.classList.add('hidden');
+            page1a.classList.add('hidden');
+            page6.classList.remove('hidden');
+            page2.classList.add('hidden');
+            page2a.classList.add('hidden');
+            page2b.classList.add('hidden');
+            page3.classList.add('hidden');
+            page4.classList.add('hidden');
+            page4a.classList.add('hidden');
+            page5.classList.add('hidden');
+            page7.classList.add('hidden');
+        }
+
+        function showPayrollProcessing() {
+            page1.classList.add('hidden');
+            page1a.classList.add('hidden');
+            page7.classList.remove('hidden');
+            page2.classList.add('hidden');
+            page2a.classList.add('hidden');
+            page2b.classList.add('hidden');
+            page3.classList.add('hidden');
+            page4.classList.add('hidden');
+            page4a.classList.add('hidden');
+            page5.classList.add('hidden');
+            page6.classList.add('hidden');
+        }
+
+        // Edit Attendance functions
+        function editAttendanceRow(attId) {
+            const rows = document.querySelectorAll('#attendanceTableBody tr');
+            let rowData = null;
+            rows.forEach(row => {
+                const td = row.querySelector('td');
+                if (td && td.textContent.trim() === attId) {
+                    const cells = row.querySelectorAll('td');
+                    rowData = {
+                        id: cells[0].textContent.trim(),
+                        employee: cells[1].textContent.trim(),
+                        date: cells[2].textContent.trim(),
+                        status: cells[3].textContent.trim()
+                    };
+                }
+            });
+
+            if (rowData) {
+                document.getElementById('editAttId').value = rowData.id;
+                const empSelect = document.getElementById('editAttEmployee');
+                for (let i = 0; i < empSelect.options.length; i++) {
+                    if (empSelect.options[i].text.includes(rowData.employee)) {
+                        empSelect.selectedIndex = i;
+                        break;
+                    }
+                }
+                document.getElementById('editAttDate').value = rowData.date;
+                const statusSelect = document.getElementById('editAttStatus');
+                for (let i = 0; i < statusSelect.options.length; i++) {
+                    if (statusSelect.options[i].value === rowData.status) {
+                        statusSelect.selectedIndex = i;
+                        break;
+                    }
+                }
+                showEditAttendance();
+            }
+        }
+
+        function editAttendance() {
+            alert('Please click the Edit button on a specific attendance record.');
+        }
+
+        // Generate Report Function
+        function generateReport(reportName) {
+            const detail = document.getElementById('reportDetail');
+            const title = document.getElementById('reportTitle');
+            const content = document.getElementById('reportContent');
+
+            title.textContent = reportName;
+
+            let html = '';
+            let reportData = [];
+
+            switch(reportName) {
+                case 'Monthly Payroll Report':
+                    reportData = [
+                        { label: 'Total Employees', value: '45' },
+                        { label: 'Total Basic Salary', value: '$225,000.00' },
+                        { label: 'Total Allowances', value: '$22,500.00' },
+                        { label: 'Total Bonuses', value: '$8,500.00' },
+                        { label: 'Total Overtime', value: '$5,200.00' },
+                        { label: 'Total Deductions', value: '$22,500.00' },
+                        { label: 'Total Net Pay', value: '$238,700.00' },
+                        { label: 'Period', value: 'June 2026' },
+                        { label: 'Generated On', value: new Date().toLocaleDateString() }
+                    ];
+                    break;
+                case 'Tax Report':
+                    reportData = [
+                        { label: 'Total Taxable Income', value: '$225,000.00' },
+                        { label: 'PAYE Tax', value: '$18,750.00' },
+                        { label: 'NSSF Contribution', value: '$3,750.00' },
+                        { label: 'NHIF Contribution', value: '$1,500.00' },
+                        { label: 'Total Tax Deductions', value: '$24,000.00' },
+                        { label: 'Tax Year', value: '2026' },
+                        { label: 'Generated On', value: new Date().toLocaleDateString() }
+                    ];
+                    break;
+                case 'Staff Salary Report':
+                    reportData = [
+                        { label: 'John Doe (IT)', value: '$5,000.00' },
+                        { label: 'Jane Smith (HR)', value: '$4,500.00' },
+                        { label: 'Bob Johnson (Finance)', value: '$5,200.00' },
+                        { label: 'Alice Brown (Marketing)', value: '$4,800.00' },
+                        { label: 'Charlie Wilson (Operations)', value: '$4,200.00' },
+                        { label: 'Total Staff', value: '45 Employees' },
+                        { label: 'Generated On', value: new Date().toLocaleDateString() }
+                    ];
+                    break;
+                case 'Deduction Report':
+                    reportData = [
+                        { label: 'PAYE Tax', value: '$18,750.00' },
+                        { label: 'NSSF Contribution', value: '$3,750.00' },
+                        { label: 'NHIF Contribution', value: '$1,500.00' },
+                        { label: 'Loan Deductions', value: '$2,500.00' },
+                        { label: 'Other Deductions', value: '$1,250.00' },
+                        { label: 'Total Deductions', value: '$27,750.00' },
+                        { label: 'Generated On', value: new Date().toLocaleDateString() }
+                    ];
+                    break;
+                default:
+                    reportData = [{ label: 'No data available', value: '' }];
+            }
+
+            reportData.forEach((item) => {
+                const isTotal = item.label.includes('Total') || item.label.includes('Generated');
+                html += `
+                    <div class="report-item ${isTotal ? 'total' : ''}">
+                        <span class="label">${item.label}</span>
+                        <span class="value">${item.value}</span>
+                    </div>
+                `;
+            });
+
+            content.innerHTML = html;
+            detail.classList.remove('hidden');
+            alert('✅ ' + reportName + ' generated successfully!');
+        }
+
+        function closeReport() {
+            document.getElementById('reportDetail').classList.add('hidden');
+        }
+
+        // Login function
+        function handleLogin(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            errorMessage.classList.remove('show');
+            successMessage.classList.remove('show');
+            const user = users.find(u => u.username === username && u.password === password);
+            if (user) {
+                successMessage.classList.add('show');
+                successMessage.innerHTML = '<i class="fas fa-check-circle"></i> Login successful!';
+                setTimeout(() => {
+                    loginSection.classList.add('hidden');
+                    dashboardSection.classList.remove('hidden');
+                    successMessage.classList.remove('show');
+                }, 800);
+            } else {
+                errorMessage.classList.add('show');
+                errorMessage.innerHTML = '<i class="fas fa-exclamation-circle"></i> Invalid username or password';
+                document.getElementById('password').value = '';
+                document.getElementById('password').focus();
+            }
+        }
+
+        function handleLogout() {
+            dashboardSection.classList.add('hidden');
+            page1.classList.remove('hidden');
+            page1a.classList.add('hidden');
+            page2.classList.add('hidden');
+            page2a.classList.add('hidden');
+            page2b.classList.add('hidden');
+            page3.classList.add('hidden');
+            page4.classList.add('hidden');
+            page4a.classList.add('hidden');
+            page5.classList.add('hidden');
+            page6.classList.add('hidden');
+            page7.classList.add('hidden');
+            loginSection.classList.remove('hidden');
+            document.getElementById('password').value = '';
+            document.getElementById('username').value = 'admin';
+            errorMessage.classList.remove('show');
+            successMessage.classList.remove('show');
+            document.getElementById('reportDetail').classList.add('hidden');
+        }
+
+        // New Attendance Form Submit
+        document.getElementById('newAttendanceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const employee = document.getElementById('attEmployee').value;
+            const date = document.getElementById('attDate').value;
+            const status = document.getElementById('attStatus').value;
+
+            if (!employee || !date || !status) {
+                alert('⚠️ Please fill in all fields.');
+                return;
+            }
+
+            const parts = employee.split('|');
+            const empId = parts[0];
+            const empName = parts[1];
+            const attId = 'ATT-' + String(Math.floor(Math.random() * 900) + 100);
+
+            const tableBody = document.getElementById('attendanceTableBody');
+            const newRow = document.createElement('tr');
+            const statusClass = status.toLowerCase().replace(' ', '');
+            newRow.innerHTML = `
+                <td>${attId}</td>
+                <td>${empId}</td>
+                <td>${date}</td>
+                <td><span class="status ${statusClass}">${status}</span></td>
+                <td><button class="edit-btn" onclick="editAttendanceRow('${attId}')"><i class="fas fa-edit"></i> Edit</button></td>
+            `;
+            tableBody.appendChild(newRow);
+
+            alert('✅ Attendance recorded successfully for ' + empName + '!');
+            document.getElementById('newAttendanceForm').reset();
+            showAttendance();
+        });
+
+        // Edit Attendance Form Submit
+        document.getElementById('editAttendanceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const attId = document.getElementById('editAttId').value;
+            const employee = document.getElementById('editAttEmployee').value;
+            const date = document.getElementById('editAttDate').value;
+            const status = document.getElementById('editAttStatus').value;
+
+            if (!attId || !employee || !date || !status) {
+                alert('⚠️ Please fill in all fields.');
+                return;
+            }
+
+            const rows = document.querySelectorAll('#attendanceTableBody tr');
+            rows.forEach(row => {
+                const td = row.querySelector('td');
+                if (td && td.textContent.trim() === attId) {
+                    const cells = row.querySelectorAll('td');
+                    const parts = employee.split('|');
+                    cells[1].textContent = parts[0];
+                    cells[2].textContent = date;
+                    const statusClass = status.toLowerCase().replace(' ', '');
+                    cells[3].innerHTML = `<span class="status ${statusClass}">${status}</span>`;
+                }
+            });
+
+            alert('✅ Attendance record ' + attId + ' updated successfully!');
+            document.getElementById('editAttendanceForm').reset();
+            showAttendance();
+        });
+
+        // Registration form submit
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const staffId = document.getElementById('staffId').value;
+            const fullName = document.getElementById('fullName').value;
+            const gender = document.getElementById('gender').value;
+            const department = document.getElementById('department').value;
+            const position = document.getElementById('position').value;
+            const bankDetails = document.getElementById('bankDetails').value;
+            const salaryGrade = document.getElementById('salaryGrade').value;
+            const employmentDate = document.getElementById('employmentDate').value;
+            const status = document.getElementById('status').value;
+
+            if (staffId && fullName && gender && department && position && bankDetails && salaryGrade && employmentDate && status) {
+                // Add to employee records
+                employeeRecords.push({
+                    staffId,
+                    fullName,
+                    gender,
+                    department,
+                    position,
+                    bankDetails,
+                    salaryGrade,
+                    employmentDate,
+                    status
+                });
+
+                alert('✅ Employee registered successfully!\n\nStaff ID: ' + staffId + '\nFull Name: ' + fullName + '\nDepartment: ' + department + '\nPosition: ' + position + '\nStatus: ' + status);
+
+                // Clear form
+                document.getElementById('registrationForm').reset();
+            } else {
+                alert('⚠️ Please fill in all fields.');
+            }
+        });
+
+        // Payslip form submit
+        document.getElementById('payslipForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const selected = document.getElementById('employeeSelect').value;
+            const date = document.getElementById('paymentDate').value;
+            if (!selected || !date) {
+                alert('⚠️ Please select an employee and enter payment date.');
+                return;
+            }
+            const parts = selected.split('|');
+            const name = parts[0];
+            const empId = parts[1];
+            const salary = parseFloat(parts[2]);
+            const deductions = parseFloat(parts[3]);
+            const netPay = salary - deductions;
+            document.getElementById('displayName').textContent = name;
+            document.getElementById('displayEmpId').textContent = empId;
+            document.getElementById('displaySalary').textContent = '$' + salary.toFixed(2);
+            document.getElementById('displayDeductions').textContent = '$' + deductions.toFixed(2);
+            document.getElementById('displayDate').textContent = new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('displayNetPay').textContent = '$' + netPay.toFixed(2);
+            document.getElementById('payslipResult').classList.remove('hidden');
+            alert('✅ Payslip generated successfully for ' + name + '!');
+        });
+
+        function printPayslip() {
+            const printWindow = window.open('', '_blank', 'width=400,height=500');
+            printWindow.document.write(`
+                <html>
+                    <head>
+                        <title>Payslip</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; padding: 30px; }
+                            .payslip-header { text-align: center; border-bottom: 2px solid #2e7d32; padding-bottom: 12px; margin-bottom: 16px; }
+                            .payslip-header h3 { color: #1a3a4a; margin: 0; }
+                            .payslip-header p { color: #6a8a9a; margin: 4px 0 0; }
+                            .payslip-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e8edf4; }
+                            .payslip-row .label { font-weight: 500; color: #4a6a7a; }
+                            .payslip-row .value { font-weight: 600; color: #1a3a4a; }
+                            .payslip-row.total { border-bottom: none; padding-top: 12px; margin-top: 4px; }
+                            .payslip-row.total .label { font-weight: 700; color: #1a3a4a; font-size: 0.95rem; }
+                            .payslip-row.total .value { font-weight: 700; color: #2e7d32; font-size: 1.1rem; }
+                            .footer { text-align: center; margin-top: 20px; font-size: 0.7rem; color: #6a8a9a; border-top: 1px solid #e8edf4; padding-top: 12px; }
+                            @media print { body { padding: 20px; } }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="payslip-header">
+                            <h3>INFORMATICS CONSULTANCY FIRM-SL</h3>
+                            <p>Monthly Payslip</p>
+                        </div>
+                        <div class="payslip-row"><span class="label">Employee Name</span><span class="value">${document.getElementById('displayName').textContent}</span></div>
+                        <div class="payslip-row"><span class="label">Employee ID</span><span class="value">${document.getElementById('displayEmpId').textContent}</span></div>
+                        <div class="payslip-row"><span class="label">Basic Salary</span><span class="value">${document.getElementById('displaySalary').textContent}</span></div>
+                        <div class="payslip-row"><span class="label">Deductions</span><span class="value">${document.getElementById('displayDeductions').textContent}</span></div>
+                        <div class="payslip-row"><span class="label">Payment Date</span><span class="value">${document.getElementById('displayDate').textContent}</span></div>
+                        <div class="payslip-row total"><span class="label">Net Pay</span><span class="value">${document.getElementById('displayNetPay').textContent}</span></div>
+                        <div class="footer">Powered by Informatics consultancy firm-sl @2026</div>
+                        <script>window.print();window.close();<\/script>
+                    </body>
+                </html>
+            `);
+            printWindow.document.close();
+        }
+
+        function clearPayslip() {
+            document.getElementById('payslipForm').reset();
+            document.getElementById('payslipResult').classList.add('hidden');
+            document.getElementById('employeeSelect').focus();
+        }
+
+        // Payroll Processing - Live Calculation
+        function updatePayrollCalculation() {
+            const basic = parseFloat(document.getElementById('basicSalary').value) || 0;
+            const allowances = parseFloat(document.getElementById('allowances').value) || 0;
+            const bonuses = parseFloat(document.getElementById('bonuses').value) || 0;
+            const overtime = parseFloat(document.getElementById('overtime').value) || 0;
+            const deductions = parseFloat(document.getElementById('processDeductions').value) || 0;
+            const gross = basic + allowances + bonuses + overtime;
+            const net = gross - deductions;
+            document.getElementById('calcBasic').textContent = '$' + basic.toFixed(2);
+            document.getElementById('calcAllowances').textContent = '$' + allowances.toFixed(2);
+            document.getElementById('calcBonuses').textContent = '$' + bonuses.toFixed(2);
+            document.getElementById('calcOvertime').textContent = '$' + overtime.toFixed(2);
+            document.getElementById('calcGross').textContent = '$' + gross.toFixed(2);
+            document.getElementById('calcDeductions').textContent = '$' + deductions.toFixed(2);
+            document.getElementById('calcNet').textContent = '$' + net.toFixed(2);
+        }
+
+        document.getElementById('basicSalary').addEventListener('input', updatePayrollCalculation);
+        document.getElementById('allowances').addEventListener('input', updatePayrollCalculation);
+        document.getElementById('bonuses').addEventListener('input', updatePayrollCalculation);
+        document.getElementById('overtime').addEventListener('input', updatePayrollCalculation);
+        document.getElementById('processDeductions').addEventListener('input', updatePayrollCalculation);
+
+        document.getElementById('payrollProcessForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const employee = document.getElementById('processEmployee').value;
+            const basic = parseFloat(document.getElementById('basicSalary').value) || 0;
+            const allowances = parseFloat(document.getElementById('allowances').value) || 0;
+            const bonuses = parseFloat(document.getElementById('bonuses').value) || 0;
+            const overtime = parseFloat(document.getElementById('overtime').value) || 0;
+            const deductions = parseFloat(document.getElementById('processDeductions').value) || 0;
+            if (!employee) { alert('⚠️ Please select an employee.'); return; }
+            const parts = employee.split('|');
+            const name = parts[0];
+            const empId = parts[1];
+            const gross = basic + allowances + bonuses + overtime;
+            const net = gross - deductions;
+            alert('✅ Payroll processed successfully for ' + name + '!\n\nEmployee ID: ' + empId + '\nBasic Salary: $' + basic.toFixed(2) + '\nAllowances: $' + allowances.toFixed(2) + '\nBonuses: $' + bonuses.toFixed(2) + '\nOvertime: $' + overtime.toFixed(2) + '\nGross Salary: $' + gross.toFixed(2) + '\nDeductions: $' + deductions.toFixed(2) + '\nNet Salary: $' + net.toFixed(2));
+        });
+
+        // Set default date for new attendance
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('attDate').value = today;
+            document.getElementById('editAttDate').value = today;
+        });
+
+        loginForm.addEventListener('submit', handleLogin);
+        logoutBtn.addEventListener('click', handleLogout);
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') { loginForm.dispatchEvent(new Event('submit')); }
+        });
+
+        // Make functions globally accessible
+        window.showDashboardPage = showDashboardPage;
+        window.showAttendance = showAttendance;
+        window.showNewAttendance = showNewAttendance;
+        window.showEditAttendance = showEditAttendance;
+        window.editAttendanceRow = editAttendanceRow;
+        window.editAttendance = editAttendance;
+        window.showPayrollCalc = showPayrollCalc;
+        window.showRegistration = showRegistration;
+        window.showEmployeeRecords = showEmployeeRecords;
+        window.showPayslip = showPayslip;
+        window.showReports = showReports;
+        window.showPayrollProcessing = showPayrollProcessing;
+        window.showPage1 = showPage1;
+        window.generateReport = generateReport;
+        window.closeReport = closeReport;
+        window.printPayslip = printPayslip;
+        window.clearPayslip = clearPayslip;
+    </script>
+
+</body>
+</html>
