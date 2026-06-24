@@ -1382,7 +1382,7 @@
 
                             <div class="attendance-summary" style="margin-top: 8px;">
                                 <div class="attendance-stat" style="border-color: #2e7d32;">
-                                    <div class="number" style="color: #2e7d32;">47</div>
+                                    <div class="number" style="color: #2e7d32;" id="totalEmployeesDash">47</div>
                                     <div class="label">Total Employees</div>
                                 </div>
                                 <div class="attendance-stat" style="border-color: #2e7d32;">
@@ -1439,15 +1439,15 @@
 
                             <div class="attendance-summary">
                                 <div class="attendance-stat">
-                                    <div class="number present">34</div>
+                                    <div class="number present" id="presentCount">34</div>
                                     <div class="label">Present</div>
                                 </div>
                                 <div class="attendance-stat">
-                                    <div class="number absent">8</div>
+                                    <div class="number absent" id="absentCount">8</div>
                                     <div class="label">Absent</div>
                                 </div>
                                 <div class="attendance-stat">
-                                    <div class="number leave">5</div>
+                                    <div class="number leave" id="leaveCount">5</div>
                                     <div class="label">On Leave</div>
                                 </div>
                             </div>
@@ -1539,15 +1539,7 @@
                                 <div class="form-group">
                                     <label for="attEmployee">Employee</label>
                                     <select class="staff-select" id="attEmployee" required>
-                                        <option value="">-- Select Employee --</option>
-                                        <option value="EMP-001|John Doe">EMP-001 - John Doe</option>
-                                        <option value="EMP-002|Jane Smith">EMP-002 - Jane Smith</option>
-                                        <option value="EMP-003|Bob Johnson">EMP-003 - Bob Johnson</option>
-                                        <option value="EMP-004|Alice Brown">EMP-004 - Alice Brown</option>
-                                        <option value="EMP-005|Charlie Wilson">EMP-005 - Charlie Wilson</option>
-                                        <option value="EMP-006|David Miller">EMP-006 - David Miller</option>
-                                        <option value="EMP-007|Emma Davis">EMP-007 - Emma Davis</option>
-                                        <option value="EMP-008|Frank Thomas">EMP-008 - Frank Thomas</option>
+                                        <!-- Options will be populated dynamically -->
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -1592,14 +1584,7 @@
                                 <div class="form-group">
                                     <label for="editAttEmployee">Employee</label>
                                     <select class="staff-select" id="editAttEmployee" required>
-                                        <option value="EMP-001|John Doe">EMP-001 - John Doe</option>
-                                        <option value="EMP-002|Jane Smith">EMP-002 - Jane Smith</option>
-                                        <option value="EMP-003|Bob Johnson">EMP-003 - Bob Johnson</option>
-                                        <option value="EMP-004|Alice Brown">EMP-004 - Alice Brown</option>
-                                        <option value="EMP-005|Charlie Wilson">EMP-005 - Charlie Wilson</option>
-                                        <option value="EMP-006|David Miller">EMP-006 - David Miller</option>
-                                        <option value="EMP-007|Emma Davis">EMP-007 - Emma Davis</option>
-                                        <option value="EMP-008|Frank Thomas">EMP-008 - Frank Thomas</option>
+                                        <!-- Options will be populated dynamically -->
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -2001,6 +1986,75 @@
             { staffId: 'EMP-008', fullName: 'Frank Thomas', gender: 'Male', department: 'Finance', position: 'Financial Analyst', bankDetails: 'BANK-H 789456', salaryGrade: 'Grade 3', employmentDate: '2024-06-15', status: 'Active' }
         ];
 
+        // Attendance records
+        let attendanceRecords = [
+            { id: 'ATT-001', employeeId: 'EMP-001', date: '2026-06-20', status: 'Present' },
+            { id: 'ATT-002', employeeId: 'EMP-002', date: '2026-06-20', status: 'Present' },
+            { id: 'ATT-003', employeeId: 'EMP-003', date: '2026-06-20', status: 'Absent' },
+            { id: 'ATT-004', employeeId: 'EMP-004', date: '2026-06-20', status: 'On Leave' },
+            { id: 'ATT-005', employeeId: 'EMP-005', date: '2026-06-20', status: 'Present' },
+            { id: 'ATT-006', employeeId: 'EMP-006', date: '2026-06-20', status: 'Present' },
+            { id: 'ATT-007', employeeId: 'EMP-007', date: '2026-06-20', status: 'Absent' },
+            { id: 'ATT-008', employeeId: 'EMP-008', date: '2026-06-20', status: 'On Leave' }
+        ];
+
+        // Function to populate employee dropdowns
+        function populateEmployeeDropdowns() {
+            const dropdowns = ['attEmployee', 'editAttEmployee'];
+            dropdowns.forEach(dropdownId => {
+                const dropdown = document.getElementById(dropdownId);
+                if (!dropdown) return;
+                const currentValue = dropdown.value;
+                dropdown.innerHTML = '<option value="">-- Select Employee --</option>';
+                employeeRecords.forEach(emp => {
+                    const option = document.createElement('option');
+                    option.value = emp.staffId + '|' + emp.fullName;
+                    option.textContent = emp.staffId + ' - ' + emp.fullName;
+                    dropdown.appendChild(option);
+                });
+                // Try to restore selected value
+                if (currentValue) {
+                    for (let i = 0; i < dropdown.options.length; i++) {
+                        if (dropdown.options[i].value === currentValue) {
+                            dropdown.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+            });
+        }
+
+        // Function to render attendance table
+        function renderAttendanceTable() {
+            const tbody = document.getElementById('attendanceTableBody');
+            tbody.innerHTML = '';
+            
+            // Update counts
+            let present = 0, absent = 0, leave = 0;
+            
+            attendanceRecords.forEach(record => {
+                const statusClass = record.status.toLowerCase().replace(' ', '');
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${record.id}</td>
+                    <td>${record.employeeId}</td>
+                    <td>${record.date}</td>
+                    <td><span class="status ${statusClass}">${record.status}</span></td>
+                    <td><button class="edit-btn" onclick="editAttendanceRow('${record.id}')"><i class="fas fa-edit"></i> Edit</button></td>
+                `;
+                tbody.appendChild(tr);
+                
+                if (record.status === 'Present') present++;
+                else if (record.status === 'Absent') absent++;
+                else if (record.status === 'On Leave') leave++;
+            });
+            
+            document.getElementById('presentCount').textContent = present;
+            document.getElementById('absentCount').textContent = absent;
+            document.getElementById('leaveCount').textContent = leave;
+            document.getElementById('totalEmployeesDash').textContent = attendanceRecords.length;
+        }
+
         // DOM elements
         const loginSection = document.getElementById('loginSection');
         const dashboardSection = document.getElementById('dashboardSection');
@@ -2062,15 +2116,18 @@
             page5.classList.add('hidden');
             page6.classList.add('hidden');
             page7.classList.add('hidden');
+            renderAttendanceTable();
         }
 
         function showNewAttendance() {
+            populateEmployeeDropdowns();
             page2.classList.add('hidden');
             page2a.classList.remove('hidden');
             page2b.classList.add('hidden');
         }
 
         function showEditAttendance() {
+            populateEmployeeDropdowns();
             page2.classList.add('hidden');
             page2b.classList.remove('hidden');
             page2a.classList.add('hidden');
@@ -2185,34 +2242,21 @@
 
         // Edit Attendance functions
         function editAttendanceRow(attId) {
-            const rows = document.querySelectorAll('#attendanceTableBody tr');
-            let rowData = null;
-            rows.forEach(row => {
-                const td = row.querySelector('td');
-                if (td && td.textContent.trim() === attId) {
-                    const cells = row.querySelectorAll('td');
-                    rowData = {
-                        id: cells[0].textContent.trim(),
-                        employee: cells[1].textContent.trim(),
-                        date: cells[2].textContent.trim(),
-                        status: cells[3].textContent.trim()
-                    };
-                }
-            });
-
-            if (rowData) {
-                document.getElementById('editAttId').value = rowData.id;
+            const record = attendanceRecords.find(r => r.id === attId);
+            if (record) {
+                document.getElementById('editAttId').value = record.id;
+                // Set employee dropdown
                 const empSelect = document.getElementById('editAttEmployee');
                 for (let i = 0; i < empSelect.options.length; i++) {
-                    if (empSelect.options[i].text.includes(rowData.employee)) {
+                    if (empSelect.options[i].value.startsWith(record.employeeId)) {
                         empSelect.selectedIndex = i;
                         break;
                     }
                 }
-                document.getElementById('editAttDate').value = rowData.date;
+                document.getElementById('editAttDate').value = record.date;
                 const statusSelect = document.getElementById('editAttStatus');
                 for (let i = 0; i < statusSelect.options.length; i++) {
-                    if (statusSelect.options[i].value === rowData.status) {
+                    if (statusSelect.options[i].value === record.status) {
                         statusSelect.selectedIndex = i;
                         break;
                     }
@@ -2239,7 +2283,7 @@
             switch(reportName) {
                 case 'Monthly Payroll Report':
                     reportData = [
-                        { label: 'Total Employees', value: '47' },
+                        { label: 'Total Employees', value: attendanceRecords.length },
                         { label: 'Total Basic Salary', value: '$235,000.00' },
                         { label: 'Total Allowances', value: '$23,500.00' },
                         { label: 'Total Bonuses', value: '$9,000.00' },
@@ -2271,7 +2315,7 @@
                         { label: 'David Miller (IT)', value: '$5,500.00' },
                         { label: 'Emma Davis (HR)', value: '$4,000.00' },
                         { label: 'Frank Thomas (Finance)', value: '$4,800.00' },
-                        { label: 'Total Staff', value: '47 Employees' },
+                        { label: 'Total Staff', value: attendanceRecords.length + ' Employees' },
                         { label: 'Generated On', value: new Date().toLocaleDateString() }
                     ];
                     break;
@@ -2371,17 +2415,13 @@
             const empName = parts[1];
             const attId = 'ATT-' + String(Math.floor(Math.random() * 900) + 100);
 
-            const tableBody = document.getElementById('attendanceTableBody');
-            const newRow = document.createElement('tr');
-            const statusClass = status.toLowerCase().replace(' ', '');
-            newRow.innerHTML = `
-                <td>${attId}</td>
-                <td>${empId}</td>
-                <td>${date}</td>
-                <td><span class="status ${statusClass}">${status}</span></td>
-                <td><button class="edit-btn" onclick="editAttendanceRow('${attId}')"><i class="fas fa-edit"></i> Edit</button></td>
-            `;
-            tableBody.appendChild(newRow);
+            // Add to attendance records
+            attendanceRecords.push({
+                id: attId,
+                employeeId: empId,
+                date: date,
+                status: status
+            });
 
             alert('✅ Attendance recorded successfully for ' + empName + '!');
             document.getElementById('newAttendanceForm').reset();
@@ -2401,18 +2441,16 @@
                 return;
             }
 
-            const rows = document.querySelectorAll('#attendanceTableBody tr');
-            rows.forEach(row => {
-                const td = row.querySelector('td');
-                if (td && td.textContent.trim() === attId) {
-                    const cells = row.querySelectorAll('td');
-                    const parts = employee.split('|');
-                    cells[1].textContent = parts[0];
-                    cells[2].textContent = date;
-                    const statusClass = status.toLowerCase().replace(' ', '');
-                    cells[3].innerHTML = `<span class="status ${statusClass}">${status}</span>`;
-                }
-            });
+            const parts = employee.split('|');
+            const empId = parts[0];
+
+            // Update attendance record
+            const record = attendanceRecords.find(r => r.id === attId);
+            if (record) {
+                record.employeeId = empId;
+                record.date = date;
+                record.status = status;
+            }
 
             alert('✅ Attendance record ' + attId + ' updated successfully!');
             document.getElementById('editAttendanceForm').reset();
@@ -2444,6 +2482,15 @@
                     salaryGrade,
                     employmentDate,
                     status
+                });
+
+                // Also add to attendance records with default status
+                const attId = 'ATT-' + String(Math.floor(Math.random() * 900) + 100);
+                attendanceRecords.push({
+                    id: attId,
+                    employeeId: staffId,
+                    date: new Date().toISOString().split('T')[0],
+                    status: 'Present'
                 });
 
                 alert('✅ Employee registered successfully!\n\nStaff ID: ' + staffId + '\nFull Name: ' + fullName + '\nDepartment: ' + department + '\nPosition: ' + position + '\nStatus: ' + status);
@@ -2572,6 +2619,8 @@
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('attDate').value = today;
             document.getElementById('editAttDate').value = today;
+            populateEmployeeDropdowns();
+            renderAttendanceTable();
         });
 
         loginForm.addEventListener('submit', handleLogin);
@@ -2598,6 +2647,8 @@
         window.closeReport = closeReport;
         window.printPayslip = printPayslip;
         window.clearPayslip = clearPayslip;
+        window.renderAttendanceTable = renderAttendanceTable;
+        window.populateEmployeeDropdowns = populateEmployeeDropdowns;
     </script>
 
 </body>
